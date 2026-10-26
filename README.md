@@ -187,8 +187,12 @@ Use the passenger JSON from the curl example. A successful response has status
 `200 OK` and contains `survival_probability` and `survived`. The application only
 defines `POST /predict`, so opening `/` in a browser returns 404.
 
-Postman screenshots showing the deployed endpoint, request, and response will be
-added here.
+The screenshots below show the successful AWS deployment and a Postman request
+to the deployed endpoint returning `200 OK` with a prediction:
+
+![Successful AWS Elastic Beanstalk deployment](screenshots/deploy.png)
+
+![Postman request and prediction response from the deployed service](screenshots/postman.png)
 
 If deployment fails, retrieve the full logs with
 `uv run eb logs titanic-serving --all` and inspect `eb-engine.log` for the failed
