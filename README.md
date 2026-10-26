@@ -33,8 +33,8 @@ missing ages are filled using the training split's mean age.
 
 ## Prerequisites
 
-Install [uv](https://docs.astral.sh/uv/getting-started/installation/)
-and Docker, and start the Docker daemon. The project requires Python 3.14 or
+Install [uv](https://docs.astral.sh/uv/getting-started/installation/).
+To run the service in a container, also install Docker and start its daemon. The project requires Python 3.14 or
 newer; uv can provision Python if needed. Initial setup requires internet access
 to download dependencies, the dataset, and container images. `uv sync` creates
 the project's `.venv`; `uv run` uses that environment without manual activation.
@@ -53,8 +53,6 @@ the Python environment or kernel. Run the cells in order; the notebook downloads
 the dataset automatically.
 
 ## Run with Docker
-
-Train the model and run the prediction service locally with Docker and uv.
 
 Install the locked dependencies and train the model first (training downloads the
 public Titanic dataset):
@@ -89,8 +87,26 @@ curl --fail-with-body http://localhost:9696/predict \
   -d '{"pclass":3,"sex":"female","age":22,"sibsp":1,"parch":0,"fare":7.25,"embarked":"S"}'
 ```
 
-The response includes `survival_probability` and a boolean `survived` prediction.
+The response includes `survival_probability` (between 0 and 1) and a boolean
+`survived` prediction, which is `true` when the probability is at least 0.5.
 The image includes the trained `model.bin`; retrain and rebuild to update it.
+
+### Prediction input
+
+Send a JSON object with the following passenger attributes:
+
+| Field | Value |
+| --- | --- |
+| `pclass` | Passenger class: integer `1`, `2`, or `3`. |
+| `sex` | `"female"` or `"male"`. |
+| `age` | Age in years; omitted or `null` values use the saved training mean. |
+| `sibsp` | Number of siblings and spouses aboard. |
+| `parch` | Number of parents and children aboard. |
+| `fare` | Passenger fare, as a number. |
+| `embarked` | Embarkation port: `"C"` (Cherbourg), `"Q"` (Queenstown), or `"S"` (Southampton). Omitted, `null`, or empty values use `"Unknown"`. |
+
+All fields except `age` and `embarked` are required. The service calculates
+family size as `sibsp + parch + 1`.
 
 ### Alternative: run locally with the EB CLI
 
@@ -113,14 +129,13 @@ running `eb local run` to stop the service.
 This command runs the container on your computer and does not create a cloud
 environment. AWS requires an initialized EB project for
 [`eb local`](https://docs.aws.amazon.com/elasticbeanstalk/latest/dg/eb3-local.html);
-The direct Docker commands above run the service without AWS setup.
+the direct Docker commands above run the service without AWS setup.
 
 ## Optional: deploy to AWS Elastic Beanstalk
 
 The service has been deployed and tested on AWS Elastic Beanstalk. To deploy
 your own instance, run these commands from the project directory.
-You need an AWS account
-with permission to create Elastic Beanstalk resources and the
+You need an AWS account with permission to create Elastic Beanstalk resources and the
 [AWS CLI](https://docs.aws.amazon.com/cli/latest/userguide/getting-started-install.html)
 installed. The EB CLI is included as a development dependency in the lockfile;
 `uv sync --frozen` installs it. Use `uv run eb` to run it without activating the
