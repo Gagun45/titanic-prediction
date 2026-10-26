@@ -62,7 +62,17 @@ docker build -t titanic-predict .
 docker run --rm -p 9696:9696 titanic-predict
 ```
 
-From another terminal, send an example request:
+Keep the container running. In another terminal, open the project directory and
+run the example prediction client:
+
+```bash
+uv run python predict-test.py
+```
+
+The client sends a passenger's attributes to `http://localhost:9696/predict`,
+checks for HTTP errors, and prints the prediction.
+
+Alternatively, send an example request with curl:
 
 ```bash
 curl --fail-with-body http://localhost:9696/predict \
