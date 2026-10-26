@@ -110,13 +110,14 @@ family size as `sibsp + parch + 1`.
 
 ### Alternative: run locally with the EB CLI
 
-If you have already initialized the project with `eb init` (see the optional AWS
-section below), you can use the EB CLI to build and run the same Docker service
-locally on Linux or macOS:
+You can use the EB CLI to build and run the same Docker service locally on Linux
+or macOS. Configure the `eb-cli` AWS credentials profile as described in the
+optional AWS section below, then initialize the project and start the service:
 
 ```bash
 uv sync --frozen
 uv run python train.py
+uv run eb init -p docker -r eu-north-1 titanic-serving --profile eb-cli
 uv run eb local run --port 9696
 ```
 
