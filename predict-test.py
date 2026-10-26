@@ -12,7 +12,7 @@ passenger = {
     'age': 22,
     'sibsp': 1,
     'parch': 0,
-    'fare': 7,
+    'fare': 7.25,
     'embarked': 'S',
 }
 
