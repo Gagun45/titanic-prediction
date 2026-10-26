@@ -1,0 +1,9 @@
+# Bundle only the Docker build inputs, including the generated model.
+# This makes EB CLI package the working files instead of the Git commit.
+*
+!Dockerfile
+!.dockerignore
+!pyproject.toml
+!uv.lock
+!predict.py
+!model.bin

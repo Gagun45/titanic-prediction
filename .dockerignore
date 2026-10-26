@@ -4,3 +4,7 @@
 !uv.lock
 !predict.py
 !model.bin
+# Elastic Beanstalk Files
+.elasticbeanstalk/*
+.git
+.gitignore
